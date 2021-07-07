@@ -39,9 +39,10 @@ void initState() {
       },);
       final data=jsonDecode(response.body);
       
-    
+    print(data);
       if(data['role']=="citizen")
       { 
+        
          Navigator.pushNamed(context, '/citizenDashboard');
           SharedPreferences prefs=await SharedPreferences.getInstance();
            prefs.setString("Refreshtoken",data['refresh']);
@@ -52,14 +53,15 @@ void initState() {
            prefs.setString("citizencountry",data["country"]);
            prefs.setString("citizenState", data['state']);
            prefs.setString("citizenCity", data['city']);
-           prefs.setString(("userid"),data['state_id']);
            prefs.setInt("city",data['city_id']);
            prefs.setInt("state", data['state_id']);
            
           
            
           ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content:const Text("Loged in Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("Loged in Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
           
          behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
@@ -69,12 +71,25 @@ void initState() {
         ));
        
       }
-      if(data['role']=="admin"){
+      
+      
+      else if(data['role']=="admin"){
        
         Navigator.pushNamed(context, '/Admin/Home');
-            
+        
+            ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("Loged in Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
+          
+         behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+       
+        ));
            }
-      if(data['role']=="officer"){
+      else if(data['role']=="officer"){
       
         final SharedPreferences prefs=await SharedPreferences.getInstance();
         prefs.setString("officername", data['name']);
@@ -83,8 +98,34 @@ void initState() {
         prefs.setString("officercountry", data['country']);
         prefs.setString("officerstate", data['state']);
         prefs.setString("officercity", data['city']);
+        prefs.setInt(("userid"),data['user_id']);
         Navigator.pushNamed(context, '/officerDashboard');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("Loged in Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
+          
+         behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+       
+        ));
       }
+      else{
+         ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red[300],
+            content:const Text("Invalid username & Password!",style: TextStyle(fontWeight: FontWeight.bold),),
+          
+         behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+       
+        ));
+      }
+      
            
 
   }

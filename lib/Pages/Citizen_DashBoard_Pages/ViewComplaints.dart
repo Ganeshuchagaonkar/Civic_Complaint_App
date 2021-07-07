@@ -78,7 +78,7 @@ class MyDyanamicView extends StatefulWidget {
 }
 
 class _MyDyanamicViewState extends State<MyDyanamicView> {
-  // var url=Uri.https('https://jsonplaceholder.typicode.com', 'posts');
+
    var data;
    @override
    void initState() { 

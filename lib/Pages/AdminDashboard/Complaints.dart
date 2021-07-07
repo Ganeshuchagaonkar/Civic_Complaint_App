@@ -10,7 +10,7 @@ class Complaints extends StatefulWidget {
   _ComplaintsState createState() => _ComplaintsState();
 }
 var complaintsdata;
-String image_url;
+
 class _ComplaintsState extends State<Complaints> {
   @override
   @override
@@ -24,9 +24,7 @@ var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/allcomplaints
   'Content-Type':'application/jsone;  charset=UTF-8'
 });
  complaintsdata=jsonDecode(res.body);
- setState(() {
-    print(complaintsdata[4]['comp_video']);
-  });
+ 
 
   }
   Widget build(BuildContext context) {
@@ -91,7 +89,7 @@ var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/allcomplaints
           ),
         ),
        body:  Container(
-          padding: EdgeInsets.fromLTRB(20, 20, 10, 20),
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -118,18 +116,18 @@ class _ComplaintViewState extends State<ComplaintView> {
     @override
     void initState() { 
       super.initState();
-      print("1");
+    
        _vlcViewController = new VlcPlayerController();
        
        
-       print("2");
+     
     }
     @override
       void dispose() {
-        // TODO: implement dispose
-        super.dispose();
+      super.dispose();
         _vlcViewController.dispose();
-      }
+      }   // TODO: implement dispose
+       
 // _stream(){
 //   setState(() {
 //       streamurl='http://192.168.43.187:8000/media/videos/1571548439460.mp4';
@@ -141,13 +139,16 @@ class _ComplaintViewState extends State<ComplaintView> {
     return ListView.builder(
     itemCount:complaintsdata.length,
     itemBuilder:(context,index) {
-      return ExpansionTile(
+      return Card(child:ExpansionTile(
    
-   title: Text(complaintsdata[index]['comp_title'].toString(),
+   title: Text(complaintsdata[index]['comp_title'],style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w500),
    
    ),
    children: [
-     Row(
+    Container(
+      padding: const EdgeInsets.all(10),
+      child: Column(children: [
+       Row(
        mainAxisAlignment: MainAxisAlignment.start,
        children: [
          Text("Title :",style: TextStyle(fontWeight: FontWeight.bold),),
@@ -180,11 +181,11 @@ class _ComplaintViewState extends State<ComplaintView> {
           Text("Image",style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width:5),
      
-      Image.network('http://192.168.43.187:8000'+complaintsdata[4]['comp_image'],width: 300,height: 120,),
+      Image.network('http://192.168.43.187:8000'+complaintsdata[4]['comp_image'],width: 250,height: 120,),
        ],
      ),
        SizedBox(height:20),
-       Text("Video"),
+       Text("Video",style: TextStyle(fontWeight: FontWeight.bold)),
            SizedBox(height: 20,),
        streamurl!=null? Container(child: new VlcPlayer(
         defaultHeight: 480,
@@ -193,15 +194,16 @@ class _ComplaintViewState extends State<ComplaintView> {
         // url:"http://192.168.43.187:8000/media/videos/1571548439460.mp4",
        url:streamurl,
         placeholder: Container(),
-        ),):Text('click the play button'),
+        ),):Text('click play button to play the video'),
         SizedBox(height:5),
         FloatingActionButton(
+          backgroundColor: Colors.purple[900],
           child:Icon(streamurl==null?Icons.play_arrow:Icons.pause),
           onPressed: (){
         setState(() {
                   if(streamurl==null){
-                    streamurl="http://192.168.43.187:8000/media/videos/1571548439460.mp4";
-                    _vlcViewController.dispose();
+                    streamurl="http://192.168.43.187:8000"+complaintsdata[index]['comp_video'];
+                    // _vlcViewController.dispose();
                   }
                   else{
                     streamurl=null;
@@ -264,8 +266,10 @@ class _ComplaintViewState extends State<ComplaintView> {
 //        }, child: Text('Notify Officer',))
 
 
+    ],),),
  ],
- );
+ ));
+ 
     },
   );
   }

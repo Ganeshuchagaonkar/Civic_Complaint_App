@@ -22,7 +22,7 @@ class _MainDashBoardPageState extends State<MainDashBoardPage> {
     });
       setState(() {
               dashboardData=jsonDecode(response.body);
-            });;
+            });
      
   }
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class _MainDashBoardPageState extends State<MainDashBoardPage> {
                           Countup(
                             begin: 0,
                             end: dashboardData==null?0 :dashboardData['total_complaints'].toDouble(),
-                            duration: Duration(seconds: 3),
+                            duration: Duration(seconds: 2),
                             style: TextStyle(
                               color: Colors.purple[900],
                               fontSize: 36,
@@ -105,7 +105,7 @@ class _MainDashBoardPageState extends State<MainDashBoardPage> {
                           Countup(
                             begin: 0,
                             end: dashboardData==null?0 :dashboardData['total_complaints_resolved'].toDouble(),
-                            duration: Duration(seconds: 4),
+                            duration: Duration(seconds: 2),
                             style: TextStyle(
                                 fontSize: 36, color: Colors.purple[900]),
                           ),
@@ -149,7 +149,7 @@ class _MainDashBoardPageState extends State<MainDashBoardPage> {
                           Countup(
                             begin: 0,
                             end:dashboardData==null?0 :dashboardData['total_officers'].toDouble(),
-                            duration: Duration(seconds: 3),
+                            duration: Duration(seconds: 2),
                             style: TextStyle(
                               color: Colors.purple[900],
                               fontSize: 36,
@@ -187,7 +187,7 @@ class _MainDashBoardPageState extends State<MainDashBoardPage> {
                           Countup(
                             begin: 0,
                             end: dashboardData==null?0 :dashboardData['total_users'].toDouble(),
-                            duration: Duration(seconds: 3),
+                            duration: Duration(seconds: 2),
                             style: TextStyle(
                                 fontSize: 36, color: Colors.purple[900]),
                           ),
@@ -231,7 +231,7 @@ class _MainDashBoardPageState extends State<MainDashBoardPage> {
                           Countup(
                             begin: 0,
                             end: dashboardData==null?0 :dashboardData['total_complaints_pending'].toDouble(),
-                            duration: Duration(seconds: 3),
+                            duration: Duration(seconds: 2),
                             style: TextStyle(
                               color: Colors.purple[900],
                               fontSize: 36,

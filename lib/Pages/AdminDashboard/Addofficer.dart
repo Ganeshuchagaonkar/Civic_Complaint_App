@@ -27,24 +27,22 @@ void initState() {
   final TextEditingController _passController = TextEditingController();
   
   void submitOfficerDetails(String name ,String email, int phone,String password)async{
-    print("Details");
-    var body=jsonEncode({"name":name,"email":email,"phone":phone,"password":password,"country":"India","role":"officer","State_id":statevalue.toInt(),"city_id":cityvalue.toInt()});
+   
+    var jsonbody=jsonEncode({"name":name,"email":email,"phone":phone,"password":password,"country":"India","role":"officer","state_id":statevalue.toInt(),"city_id":cityvalue.toInt()});
   var response=await http.post(Uri.http("192.168.43.187:8000", "users/adduser/")
-  ,body: body,headers: <String,String>{
+  ,body: jsonbody,headers: <String,String>{
     'Content-Type':'application/json; charset=UTF-8',
   }
   );
-  final data=jsonDecode(response.body);
+  var data=jsonDecode(response.body);
   print(data);
-  if(data['Status']==1){
+  if(data['status']==1){
        
           ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content:const Text("New officer added Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
-          // width: 300.0,
-          
-          // padding: const EdgeInsets.symmetric(
-          //     horizontal: 10.0, // Inner padding for SnackBar content.
-          //   ),
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("New officer added Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
+         
          behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),

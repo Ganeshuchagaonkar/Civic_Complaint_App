@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 class PendingIssue extends StatefulWidget {
   @override
   _PendingIssueState createState() => _PendingIssueState();
@@ -79,16 +82,33 @@ class PendingView extends StatefulWidget {
 }
 
 class _PendingViewState extends State<PendingView> {
+  List pendingissue;
   @override
+  @override
+  void initState() { 
+    super.initState();
+    pendingIssue();
+  }
+  void pendingIssue()async{
+
+var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/pending/complaints/"),headers: <String,String>{
+  'Content-Type':'application/jsone;  charset=UTF-8'
+});
+ pendingissue=jsonDecode(res.body);
+ setState(() {
+    print(pendingissue);
+  });
+
+  }
   Widget build(BuildContext context) {
     
-      final titles=['Title1', 'Title2','Title3'];
+      
     return ListView.builder(
-    itemCount:titles.length,
+    itemCount:pendingissue.length,
     itemBuilder:(context,index) {
-      return ExpansionTile(
+      return pendingissue!=null ? ExpansionTile(
    
-   title: Text(titles[index],
+   title: Text(pendingissue[index],
 
    
    ),
@@ -138,6 +158,10 @@ class _PendingViewState extends State<PendingView> {
      )
 
  ],
+ ):
+ Center(child:Container(
+   child: Text("No pending issue"),
+ ),
  );
     },
   );

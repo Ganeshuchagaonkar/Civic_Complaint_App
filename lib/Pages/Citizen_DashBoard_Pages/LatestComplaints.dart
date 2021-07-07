@@ -80,7 +80,7 @@ class LatestView extends StatefulWidget {
 class _LatestViewState extends State<LatestView> {
 
 
-   var data;
+   List data;
    @override
    void initState() { 
      super.initState();
@@ -90,7 +90,7 @@ class _LatestViewState extends State<LatestView> {
    }
  Future<String> getJsondata()async{
      
-     var response= await http.get(Uri.http('192.168.43.187:8000', '/complaints/allcomplaints/'),
+     var response= await http.get(Uri.http('192.168.43.187:8000', '/complaints/latestcomplaints/'),
      
       headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -100,24 +100,28 @@ class _LatestViewState extends State<LatestView> {
        data=jsonDecode(response.body);
       
      });
-      print(data[0]['comp_title']);
-
+     
+  return null;
    }
 
   @override
   Widget build(BuildContext context) {
     return  ListView.builder(
-    itemCount:data==null? 0 :4,//data.lenght()
+    itemCount:data.length,
     itemBuilder:(context,index) {
-      return ExpansionTile(
+      return Card( child: ExpansionTile(
    
-   title: Text(data[index]['comp_title'],
+   title: Text(data[index]['comp_title'],style: TextStyle(fontWeight: FontWeight.w500,color: Colors.black),
    ),
    children: [
-     Row(
+    Container(
+      padding: const EdgeInsets.all(10),
+   child: Column(
+     children: [
+        Row(
        mainAxisAlignment: MainAxisAlignment.start,
        children: [
-         Text("Title :",style: TextStyle(fontWeight: FontWeight.bold),),
+         Text("Title :",style: TextStyle(fontWeight: FontWeight.bold,),),
            SizedBox(width:20),
         Expanded(child:  Text(data[index]['comp_title']))
        ],
@@ -136,7 +140,7 @@ class _LatestViewState extends State<LatestView> {
          Text("Description:",style: TextStyle(fontWeight: FontWeight.bold),),
            SizedBox(width:20),
         Container(
-          padding: EdgeInsets.only(top:30),
+          padding: EdgeInsets.only(top:20),
           width:150,
           child : Text(data[index]['comp_desc'], overflow: TextOverflow.ellipsis,maxLines: 10,textAlign: TextAlign.justify,),)
        ],
@@ -157,10 +161,15 @@ class _LatestViewState extends State<LatestView> {
          Text(data[index]['status'])
        ],
      ),
-     SizedBox(height:20),
+     SizedBox(height: 20,)
+  
 
+     ],
+   ),
+    ),
  ],
- );
+ )
+      );
     },
   );
 

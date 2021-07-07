@@ -1,7 +1,10 @@
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_vlc_player/vlc_player.dart';
+import 'package:flutter_vlc_player/vlc_player_controller.dart';
+
 class AllComplaints extends StatefulWidget {
   @override
   _AllComplaintsState createState() => _AllComplaintsState();
@@ -62,7 +65,7 @@ class _AllComplaintsState extends State<AllComplaints> {
          ),
       body:
       Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,19 +83,37 @@ class AllComplaintsView extends StatefulWidget {
   @override
   _AllComplaintsViewState createState() => _AllComplaintsViewState();
 }
-var allcomplaintsdata;
+List allcomplaintsdata;
 class _AllComplaintsViewState extends State<AllComplaintsView> {
-  @override
+    VlcPlayerController _vlcViewController;
+    String streamurl;
+ 
   @override
   void initState() { 
     super.initState();
     getallComplaints();
+    _vlcViewController = new VlcPlayerController();
+    
   }
+   @override
+   void dispose() {
+      super.dispose();
+        _vlcViewController.dispose();
+      } 
   void getallComplaints()async{
-var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/allcomplaints"),headers: <String,String>{
+    String user_id;
+    final SharedPreferences prefs=await SharedPreferences.getInstance();
+    setState(() {
+          user_id=prefs.get('userid').toString();
+        });
+        
+
+var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/allcomplaints/officer/$user_id"),headers: <String,String>{
   'Content-Type':'application/jsone;  charset=UTF-8'
 });
- allcomplaintsdata=jsonDecode(res.body);
+setState(() {
+   allcomplaintsdata=jsonDecode(res.body);
+});
 print(allcomplaintsdata);
   }
   Widget build(BuildContext context) {
@@ -100,12 +121,15 @@ print(allcomplaintsdata);
     return ListView.builder(
     itemCount:allcomplaintsdata.length,
     itemBuilder:(context,index) {
-      return ExpansionTile(
+      return Card(child:  ExpansionTile(
    
-   title: Text(allcomplaintsdata[index]['comp_title'], ),
-   leading: Text(allcomplaintsdata[index]['comp_id'].toString()),
+   title: Text(allcomplaintsdata[index]['comp_title'] ,style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w500)),
+  //  leading: Text(allcomplaintsdata[index]['comp_id'].toString()),
    children: [
-     Row(
+     Container(
+       padding: const EdgeInsets.all(10),
+      child: Column(children: [
+ Row(
        mainAxisAlignment: MainAxisAlignment.start,
        children: [
          Text("Title :",style: TextStyle(fontWeight: FontWeight.bold),),
@@ -147,80 +171,49 @@ print(allcomplaintsdata);
          Text("Image:",style: TextStyle(fontWeight: FontWeight.bold),),
            SizedBox(width:20),
         Container(child:    Image(
-                      image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPxtY8UbiWl5b4XeBM13orHgoRCFSGha-Nv2Pi8dujjm5gbAeRQVHb3P1DfyumEY2xg6Y&usqp=CAU'),
-                      width: 200,
-                      height: 200,
+                      image: NetworkImage('http://192.168.43.187:8000'+allcomplaintsdata[index]['comp_image']),
+                      width: 250,
+                      height: 150,
                       
         ),)
        ],
      ),
-       SizedBox(height:20),
-      Row( mainAxisAlignment: MainAxisAlignment.start,
-       children: [
-         Text("Video:",style: TextStyle(fontWeight: FontWeight.bold),),
-           SizedBox(width:20),
-        Container(
-          width:200,
-          height: 200,
-          child: Text('Video'),
-                      
-        )
-       ],
-     ),
+      
      SizedBox(height:30),
-     TextButton(
+    Text("Video",style: TextStyle(fontWeight: FontWeight.bold)),
+           SizedBox(height: 20,),
+       streamurl!=null? Container(child: new VlcPlayer(
+        defaultHeight: 480,
+        defaultWidth: 640,
+        controller: _vlcViewController,
+        // url:"http://192.168.43.187:8000/media/videos/1571548439460.mp4",
+       url:streamurl,
+        placeholder: Container(),
+        ),):Text('click play button to play the video'),
+        SizedBox(height:5),
+        FloatingActionButton(
+          backgroundColor: Colors.purple[900],
+          child:Icon(streamurl==null?Icons.play_arrow:Icons.pause),
+          onPressed: (){
+        setState(() {
+                  if(streamurl==null){
+                    streamurl="http://192.168.43.187:8000"+allcomplaintsdata[index]['comp_video'];
+                    // _vlcViewController.dispose();
+                  }
+                  else{
+                    streamurl=null;
+                  }
+                }
+                );
+                
+        }
+        ),
+          SizedBox(height:20),
+      ],)
+     ),
     
-       onPressed: (){
-         return showDialog(
-context:context,
-builder:(BuildContext context){
-  return Dialog(
-    shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(20.0)),
-
-          child: Container(
-            height: 300,
-           
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: SingleChildScrollView(
-                              child: Column(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-                      TextField(
-                        keyboardType: TextInputType.text,
-                        maxLines: 2,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Action Text'),
-                      ),
-                      
-                      TextField(
-                        keyboardType: TextInputType.text,
-                        maxLines: 3,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Status'),
-                      ),
-                     
-                       TextButton(
-                        
-                         onPressed:(){
-
-                       }, child: Text('Submit',style: TextStyle(color: Colors.white,backgroundColor: Colors.purple[900]),))
-
-            ],
-          ),
-              ),),)
-
-  );
-}
-         );
-       }, child: Text('Take Action',style: TextStyle(color: Colors.white,backgroundColor: Colors.purple[900]),))
-
  ],
+      )
  );
     },
   );
