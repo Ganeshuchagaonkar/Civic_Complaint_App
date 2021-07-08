@@ -53,6 +53,7 @@ void initState() {
            prefs.setString("citizencountry",data["country"]);
            prefs.setString("citizenState", data['state']);
            prefs.setString("citizenCity", data['city']);
+           prefs.setInt("userid", data['user_id']);
            prefs.setInt("city",data['city_id']);
            prefs.setInt("state", data['state_id']);
            
@@ -206,37 +207,37 @@ void initState() {
                     
                     
                    
-                    Material(
-                         elevation: 5,
-                        shadowColor: Colors.grey,
-                        child: DropdownButtonFormField(
+                    // Material(
+                    //      elevation: 5,
+                    //     shadowColor: Colors.grey,
+                    //     child: DropdownButtonFormField(
                           
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.fromLTRB(10, 16, 10, 16),
-                            border: InputBorder.none,
-                            filled: true,
-                             prefixIcon: Icon(
-                              Icons.arrow_downward_rounded,
-                              size: 25,
-                              color: Colors.black
-                            ),
+                    //       decoration: InputDecoration(
+                    //         contentPadding: EdgeInsets.fromLTRB(10, 16, 10, 16),
+                    //         border: InputBorder.none,
+                    //         filled: true,
+                    //          prefixIcon: Icon(
+                    //           Icons.arrow_downward_rounded,
+                    //           size: 25,
+                    //           color: Colors.black
+                    //         ),
                             
-                            hintStyle: TextStyle(color: Colors.grey),
-                            hintText: "Choose UserType",
-                            fillColor: Colors.white,
-                          ),
-                          value: dropDownValue,
-                          onChanged: (String value) {
-                            setState(() {
-                              dropDownValue = value;
-                            });
-                          },
-                          items: userType
-                              .map((item) => DropdownMenuItem(
-                                  value: item, child: Text("$item")))
-                              .toList(),
-                        ),
-                      ),
+                    //         hintStyle: TextStyle(color: Colors.grey),
+                    //         hintText: "Choose UserType",
+                    //         fillColor: Colors.white,
+                    //       ),
+                    //       value: dropDownValue,
+                    //       onChanged: (String value) {
+                    //         setState(() {
+                    //           dropDownValue = value;
+                    //         });
+                    //       },
+                    //       items: userType
+                    //           .map((item) => DropdownMenuItem(
+                    //               value: item, child: Text("$item")))
+                    //           .toList(),
+                    //     ),
+                    //   ),
                       SizedBox(
                       height: 20.0,
                     ),

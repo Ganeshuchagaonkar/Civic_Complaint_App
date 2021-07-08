@@ -28,6 +28,8 @@ dependencies:
   video_player: ^2.1.1
   http: ^0.13.3
   shared_preferences: ^2.0.6
+  google_maps_flutter: ^2.0.1
+  geocoder: ^0.2.1
   flutter_vlc_player: ^0.0.2
   flutter_redux: ^0.8.2
   redux: ^5.0.0  

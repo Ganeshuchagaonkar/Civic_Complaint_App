@@ -57,16 +57,7 @@ class _AdminHomeState extends State<AdminHome> {
                
               ),
               Divider(),
-              new ListTile(
-                  title: new Text(
-                    'Users',
-                    
-                  ),
-                onTap: (){
-                Navigator.pushNamed(context, '/Admin/citizen');
-              },
-                  ),
-                  Divider(),
+              
               new ListTile(
                 title: new Text(
                   'Complaints',

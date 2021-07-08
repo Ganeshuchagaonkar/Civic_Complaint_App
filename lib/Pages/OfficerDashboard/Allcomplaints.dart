@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:civic_app/Resusable_Component/DisplayMap.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -34,6 +36,13 @@ class _AllComplaintsState extends State<AllComplaints> {
            },
          ),
           Divider(),
+          ListTile(
+           title: Text("Update Complaints"),
+           onTap: (){
+             Navigator.pushNamed(context, '/updatecomplaint');
+           },
+         ),
+            Divider(),
          ListTile(
            title: Text("Pending Complaints"),
            onTap: (){
@@ -48,13 +57,7 @@ class _AllComplaintsState extends State<AllComplaints> {
            },
          ),
             Divider(),
-         ListTile(
-           title: Text("Notification"),
-             onTap: (){
-             Navigator.pushNamed(context, '/officerDashboard/Notification');
-           },
-         ),
-            Divider(),
+        
          ListTile(
            title: Text("Profile"),
         onTap: (){
@@ -100,6 +103,16 @@ class _AllComplaintsViewState extends State<AllComplaintsView> {
       super.dispose();
         _vlcViewController.dispose();
       } 
+      Future getLatLang() async {
+    // From a query
+    final query = "1600 Amphiteatre Parkway, Mountain View";
+    var addresses = await Geocoder.local.findAddressesFromQuery(query);
+    var first = addresses.first;
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => DisplayMap(
+            latitude: first.coordinates.latitude,
+            longitude: first.coordinates.longitude)));
+  }
   void getallComplaints()async{
     String user_id;
     final SharedPreferences prefs=await SharedPreferences.getInstance();
@@ -116,12 +129,13 @@ setState(() {
 });
 print(allcomplaintsdata);
   }
+
   Widget build(BuildContext context) {
      
     return ListView.builder(
     itemCount:allcomplaintsdata.length,
     itemBuilder:(context,index) {
-      return Card(child:  ExpansionTile(
+      return allcomplaintsdata!=null? Card(child:  ExpansionTile(
    
    title: Text(allcomplaintsdata[index]['comp_title'] ,style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w500)),
   //  leading: Text(allcomplaintsdata[index]['comp_id'].toString()),
@@ -154,8 +168,23 @@ print(allcomplaintsdata);
        children: [
          Text("Address :",style: TextStyle(fontWeight: FontWeight.bold),),
           SizedBox(width:20),
-         Text("")
+         Text(allcomplaintsdata[index]['address'])
        ],
+     ),
+     SizedBox(height:20),
+      Row( mainAxisAlignment: MainAxisAlignment.start,
+       children: [
+         Text("Location:",style: TextStyle(fontWeight: FontWeight.bold),),
+           SizedBox(width:20),
+           TextButton
+           ( 
+             onPressed:(){
+    getLatLang();
+           }, 
+           
+           child: Text("Click here view the location"))
+        
+           ],
      ),
       SizedBox(height:20),
       Row( mainAxisAlignment: MainAxisAlignment.start,
@@ -214,7 +243,8 @@ print(allcomplaintsdata);
     
  ],
       )
- );
+ ):
+ CircularProgressIndicator();
     },
   );
   }

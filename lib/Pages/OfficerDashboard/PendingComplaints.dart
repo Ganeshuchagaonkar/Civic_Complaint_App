@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 class PendingIssue extends StatefulWidget {
   @override
   _PendingIssueState createState() => _PendingIssueState();
@@ -31,6 +32,13 @@ class _PendingIssueState extends State<PendingIssue> {
            },
          ),
           Divider(),
+          ListTile(
+           title: Text("Update Complaints"),
+           onTap: (){
+             Navigator.pushNamed(context, '/updatecomplaint');
+           },
+         ),
+            Divider(),
          ListTile(
            title: Text("Pending Complaints"),
            onTap: (){
@@ -45,13 +53,7 @@ class _PendingIssueState extends State<PendingIssue> {
            },
          ),
             Divider(),
-         ListTile(
-           title: Text("Notification"),
-             onTap: (){
-             Navigator.pushNamed(context, '/officerDashboard/Notification');
-           },
-         ),
-            Divider(),
+        
          ListTile(
            title: Text("Profile"),
         onTap: (){
@@ -82,7 +84,7 @@ class PendingView extends StatefulWidget {
 }
 
 class _PendingViewState extends State<PendingView> {
-  List pendingissue;
+  List<dynamic> pendingissue;
   @override
   @override
   void initState() { 
@@ -90,12 +92,17 @@ class _PendingViewState extends State<PendingView> {
     pendingIssue();
   }
   void pendingIssue()async{
-
-var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/pending/complaints/"),headers: <String,String>{
+ String user_id;
+    final SharedPreferences prefs=await SharedPreferences.getInstance();
+    setState(() {
+          user_id=prefs.get('userid').toString();
+        });
+var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/pending/complaints/$user_id"),headers: <String,String>{
   'Content-Type':'application/jsone;  charset=UTF-8'
 });
  pendingissue=jsonDecode(res.body);
  setState(() {
+    pendingissue=jsonDecode(res.body);
     print(pendingissue);
   });
 
@@ -103,12 +110,12 @@ var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/pending/compl
   Widget build(BuildContext context) {
     
       
-    return ListView.builder(
+    return pendingissue!=null? ListView.builder(
     itemCount:pendingissue.length,
     itemBuilder:(context,index) {
-      return pendingissue!=null ? ExpansionTile(
+      return  ExpansionTile(
    
-   title: Text(pendingissue[index],
+   title: Text(pendingissue[index]['comp_title'],
 
    
    ),
@@ -118,7 +125,7 @@ var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/pending/compl
        children: [
          Text("Title :",style: TextStyle(fontWeight: FontWeight.bold),),
            SizedBox(width:20),
-         Text("")
+         Text(pendingissue[index]['comp_title'])
        ],
      ),
      SizedBox(height:20),
@@ -126,7 +133,7 @@ var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/pending/compl
        children: [
          Text("Complaint Date :",style: TextStyle(fontWeight: FontWeight.bold),),
           SizedBox(width:20),
-         Text("10-05-2020")
+         Text(pendingissue[index]['comp_date'])
        ],
      ),
       SizedBox(height:10),
@@ -137,7 +144,7 @@ var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/pending/compl
         Container(
           padding: EdgeInsets.only(top:30),
           width:150,
-          child : Text("Complaint Against the bskjdkdsf fndskhfhkds bjhgjhgsgf city bbs sajg hgsjg ttds", overflow: TextOverflow.ellipsis,maxLines: 10,textAlign: TextAlign.justify,),)
+          child : Text(pendingissue[index]['comp_desc'], overflow: TextOverflow.ellipsis,maxLines: 10,textAlign: TextAlign.justify,),)
        ],
      ),
       SizedBox(height:20),
@@ -145,7 +152,7 @@ var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/pending/compl
        children: [
          Text("Progress:",style: TextStyle(fontWeight: FontWeight.bold),),
         SizedBox(width:20),
-         Text("70%")
+         Text(pendingissue[index]['progress'].toString())
        ],
      ),
       SizedBox(height:20),
@@ -153,18 +160,15 @@ var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/pending/compl
        children: [
          Text("Status:",style: TextStyle(fontWeight: FontWeight.bold),),
            SizedBox(width:20),
-         Text("")
+         Text(pendingissue[index]['status'])
        ],
      )
 
  ],
- ):
- Center(child:Container(
-   child: Text("No pending issue"),
- ),
  );
-    },
-  );
+    }  
+  ):
+ Center(child: Text("No pending complaints"),);
     
   }
 }

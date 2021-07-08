@@ -86,10 +86,35 @@ class _SignupState extends State<Signup> {
       },
     );
     var signupdata = jsonDecode(response.body);
+    print(signupdata);
     
-    if(signupdata['Status']==1){
+    if(signupdata['status']==1){
       
          Navigator.pushNamed(context, '/login');
+         ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("Registred Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
+          
+         behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+       
+        ));
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("fail to register",style: TextStyle(fontWeight: FontWeight.bold),),
+          
+         behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+       
+        ));
     }
  
   }
@@ -158,7 +183,6 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("$token"),),
       body: Container(
           padding: EdgeInsets.all(20),
           child: Form(

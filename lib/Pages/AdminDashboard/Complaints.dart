@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:civic_app/Resusable_Component/DisplayMap.dart';
+import 'package:flutter_vlc_player/generated/i18n.dart';
 import 'package:flutter_vlc_player/vlc_player.dart';
 import 'package:flutter_vlc_player/vlc_player_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
+import 'package:geocoder/geocoder.dart';
 
 class Complaints extends StatefulWidget {
   @override
   _ComplaintsState createState() => _ComplaintsState();
 }
-var complaintsdata;
+List complaintsdata;
 
 class _ComplaintsState extends State<Complaints> {
   @override
@@ -23,10 +26,15 @@ class _ComplaintsState extends State<Complaints> {
 var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/allcomplaints"),headers: <String,String>{
   'Content-Type':'application/jsone;  charset=UTF-8'
 });
- complaintsdata=jsonDecode(res.body);
+
+setState(() {
+   complaintsdata=jsonDecode(res.body);
+   print(complaintsdata);
+});
  
 
   }
+   
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -65,16 +73,7 @@ var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/allcomplaints
                 },
               ),
             
-              
-              Divider(),
-              new ListTile(
-                title: new Text(
-                  'Users',
-                ),
-                 onTap: (){
-                  Navigator.pushNamed(context, '/Admin/citizen');
-                },
-              ),
+             
               Divider(),
               new ListTile(
                 title: new Text(
@@ -133,13 +132,23 @@ class _ComplaintViewState extends State<ComplaintView> {
 //       streamurl='http://192.168.43.187:8000/media/videos/1571548439460.mp4';
 //     });
 // }
+Future getLatLang() async {
+    // From a query
+    final query = "1600 Amphiteatre Parkway, Mountain View";
+    var addresses = await Geocoder.local.findAddressesFromQuery(query);
+    var first = addresses.first;
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => DisplayMap(
+            latitude: first.coordinates.latitude,
+            longitude: first.coordinates.longitude)));
+  }
   @override
   Widget build(BuildContext context) {
     
     return ListView.builder(
     itemCount:complaintsdata.length,
     itemBuilder:(context,index) {
-      return Card(child:ExpansionTile(
+      return complaintsdata!=null ? Card(child:ExpansionTile(
    
    title: Text(complaintsdata[index]['comp_title'],style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w500),
    
@@ -175,6 +184,31 @@ class _ComplaintViewState extends State<ComplaintView> {
        ],
      ),
      
+     SizedBox(height:20),
+      Row( mainAxisAlignment: MainAxisAlignment.start,
+       children: [
+         Text("Address:",style: TextStyle(fontWeight: FontWeight.bold),),
+           SizedBox(width:20),
+        
+        
+           Text(complaintsdata[index]['address'], overflow: TextOverflow.ellipsis,maxLines: 10,textAlign: TextAlign.justify,),
+       ],
+     ),
+     SizedBox(height: 20,),
+     Row( mainAxisAlignment: MainAxisAlignment.start,
+       children: [
+         Text("Location:",style: TextStyle(fontWeight: FontWeight.bold),),
+           SizedBox(width:20),
+           TextButton
+           ( 
+             onPressed:(){
+    getLatLang();
+           }, 
+           
+           child: Text("Click here view the location"))
+        
+           ],
+     ),
       SizedBox(height:20),
      Row(
        children: [
@@ -191,7 +225,7 @@ class _ComplaintViewState extends State<ComplaintView> {
         defaultHeight: 480,
         defaultWidth: 640,
         controller: _vlcViewController,
-        // url:"http://192.168.43.187:8000/media/videos/1571548439460.mp4",
+      
        url:streamurl,
         placeholder: Container(),
         ),):Text('click play button to play the video'),
@@ -214,61 +248,15 @@ class _ComplaintViewState extends State<ComplaintView> {
         }
         ),
           SizedBox(height:20),
-//      TextButton(
-//         style: TextButton.styleFrom(
-//                        backgroundColor: Colors.purple[900],
-//                         primary: Colors.white,
-//                         onSurface: Colors.grey),
-//        onPressed: (){
-//          return showDialog(
-// context:context,
-// builder:(BuildContext context){
-//   return Dialog(
-//     shape: RoundedRectangleBorder(
-//                 borderRadius:
-//                     BorderRadius.circular(20.0)),
 
-//           child: Container(
-//             height: 200,
-           
-//             child: Padding(
-//               padding: const EdgeInsets.only(top:30,left: 20,),
-//               child: SingleChildScrollView(
-//                               child: Column(
-//                    mainAxisAlignment: MainAxisAlignment.center,
-//                     crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//                       TextField(
-//                         keyboardType: TextInputType.text,
-//                         maxLines: 2,
-//                         decoration: InputDecoration(
-//                             border: InputBorder.none,
-//                             hintText: 'Enter Message'),
-//                       ),
-                      
-                     
-//                        TextButton(
-//                         style: TextButton.styleFrom(
-//                        backgroundColor: Colors.purple[900],
-//                         primary: Colors.white,
-//                         onSurface: Colors.grey),
-//                          onPressed:(){
-
-//                        }, child: Text('Submit',style: TextStyle(color: Colors.white,backgroundColor:  Colors.purple[900],),))
-
-//             ],
-//           ),
-//               ),),)
-
-//   );
-// }
-//          );
-//        }, child: Text('Notify Officer',))
 
 
     ],),),
  ],
- ));
+ )):
+  CircularProgressIndicator(
+    
+  );
  
     },
   );

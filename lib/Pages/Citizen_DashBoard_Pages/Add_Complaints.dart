@@ -8,9 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-int statevalue;
-int cityvalue ;
-
 class Add_Complaints extends StatefulWidget {
   @override
   _Add_ComplaintsState createState() => _Add_ComplaintsState();
@@ -21,7 +18,9 @@ class _Add_ComplaintsState extends State<Add_Complaints> {
   File _imagepath;
   File _video;
   File _videopath;
-
+  int statevalue;
+  int cityvalue ;
+  int user_id;
   var picker = ImagePicker();
   final _title = TextEditingController();
   final _emailController = TextEditingController();
@@ -29,13 +28,24 @@ class _Add_ComplaintsState extends State<Add_Complaints> {
   final _addressController = TextEditingController();
   var _imagefilename;
   var _videofilename;
+ 
 
   @override
   void initState() {
     super.initState();
     getlocalstoragedata();
   }
+ void getlocalstoragedata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    
+      setState(() {
+             cityvalue = prefs.get("city");
+              statevalue = prefs.get("state");
+              user_id=prefs.get('userid');
 
+            });
+  
+  }
   void addcomplaints(
       String title, String description, String address) async {
         print(_imagefilename);
@@ -47,27 +57,30 @@ class _Add_ComplaintsState extends State<Add_Complaints> {
        
         request.fields['comp_title']=title;
         request.fields['comp_desc']=description;
-        request.fields['comp_by']="2";
+        request.fields['comp_by']=user_id.toString();
         request.fields['address']=address;
         request.fields['country']="india";
         request.fields['state_id']=statevalue.toString();
         request.fields['city_id']=cityvalue.toString();
  var res=await request.send();
 
- var result=jsonDecode(res.reasonPhrase);
- print(result);
+ if(res.statusCode==200){
+   ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("Complaint registred Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
+          
+         behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+       
+        ));
+ }
     
   }
 
-  void getlocalstoragedata() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    
-      setState(() {
-              cityvalue = prefs.get("city");
-      statevalue = prefs.get("state");
-            });
-  
-  }
+ 
 
 
 
@@ -212,26 +225,7 @@ class _Add_ComplaintsState extends State<Add_Complaints> {
                   ),
                   SizedBox(height: 20),
 
-                  Material(
-                    elevation: 5,
-                    shadowColor: Colors.grey,
-                    child: TextFormField(
-                      readOnly: true,
-                      initialValue: "1",
-                      keyboardType: TextInputType.text,
-                      validator: validateEmail,
-                      decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                          border: InputBorder.none,
-                          fillColor: Colors.white,
-                          filled: true,
-                        
-                          ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  
                   Material(
                     elevation: 5,
                     shadowColor: Colors.grey,
@@ -247,57 +241,7 @@ class _Add_ComplaintsState extends State<Add_Complaints> {
                           hintStyle: TextStyle(color: Colors.grey),
                           hintText: "Enter your  address"),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Material(
-                          elevation: 5,
-                          shadowColor: Colors.grey,
-                          child: TextFormField(
-                            // controller: _userNameController,
-                            keyboardType: TextInputType.text,
-
-                            readOnly: true,
-                            initialValue: cityvalue.toString(),
-                            decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(10, 10, 0, 10),
-
-                              border: InputBorder.none,
-                              fillColor: Colors.white,
-                              filled: true,
-
-                              // hintStyle: TextStyle(color: Colors.grey),
-                              // hintText: "City_id",
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: Material(
-                          elevation: 5,
-                          shadowColor: Colors.grey,
-                          child: TextFormField(
-                            // controller: _userNameController,
-                            keyboardType: TextInputType.text,
-
-                            readOnly: true,
-                            initialValue: statevalue.toString(),
-                            decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(10, 10, 0, 10),
-                              border: InputBorder.none,
-                              fillColor: Colors.white,
-                              filled: true,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                  ), 
                   SizedBox(height: 20),
                   Row(
                     children: [

@@ -28,6 +28,13 @@ drawer:new Drawer(
            },
          ),
           Divider(),
+          ListTile(
+           title: Text("Update Complaints"),
+           onTap: (){
+             Navigator.pushNamed(context, '/updatecomplaint');
+           },
+         ),
+            Divider(),
          ListTile(
            title: Text("Pending Complaints"),
            onTap: (){
@@ -42,13 +49,7 @@ drawer:new Drawer(
            },
          ),
             Divider(),
-         ListTile(
-           title: Text("Notification"),
-             onTap: (){
-             Navigator.pushNamed(context, '/officerDashboard/Notification');
-           },
-         ),
-            Divider(),
+        
          ListTile(
            title: Text("Profile"),
         onTap: (){

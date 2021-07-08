@@ -1,6 +1,7 @@
-import 'package:civic_app/Pages/OfficerDashboard/Notification.dart';
+
 import 'package:civic_app/Pages/OfficerDashboard/Profile.dart';
 import 'package:civic_app/Resusable_Component/MainDashboardPage.dart';
+import 'package:civic_app/Resusable_Component/officerdashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:countup/countup.dart';
 
@@ -32,6 +33,13 @@ class _OfficerDashboardState extends State<OfficerDashboard> {
            },
          ),
           Divider(),
+          ListTile(
+           title: Text("Update Complaints"),
+           onTap: (){
+             Navigator.pushNamed(context, '/updatecomplaint');
+           },
+         ),
+            Divider(),
          ListTile(
            title: Text("Pending Complaints"),
            onTap: (){
@@ -46,22 +54,16 @@ class _OfficerDashboardState extends State<OfficerDashboard> {
            },
          ),
             Divider(),
-         ListTile(
-           title: Text("Notification"),
-             onTap: (){
-             Navigator.pushNamed(context, '/officerDashboard/Notification');
-           },
-         ),
-            Divider(),
+        
          ListTile(
            title: Text("Profile"),
         onTap: (){
              Navigator.pushNamed(context, '/officerDashboard/profile');
            },
          ),
-       ], ), 
-      ),
-     body: MainDashBoardPage()
+       ], )
+         ),
+     body: OfficerDashBoardPage(),
     );
   }
 }
