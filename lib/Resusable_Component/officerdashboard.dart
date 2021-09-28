@@ -30,7 +30,7 @@ class _OfficerDashBoardPageState extends State<OfficerDashBoardPage> {
     setState(() {
        user_id = prefs.get("userid");
     });
-    print(user_id);
+  
     final response = await http.get(
         Uri.http("192.168.43.187:8000", "complaints/officer/home/$user_id"),
         headers: <String, String>{

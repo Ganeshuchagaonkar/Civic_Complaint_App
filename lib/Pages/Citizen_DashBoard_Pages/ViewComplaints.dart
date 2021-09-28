@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:civic_app/config.dart' as config;
 
  class ViewComplaints extends StatefulWidget {
    @override
@@ -89,7 +90,7 @@ class _MyDyanamicViewState extends State<MyDyanamicView> {
    }
    Future<String> getJsondata()async{
      
-     var response= await http.get(Uri.http('192.168.43.187:8000', '/complaints/allcomplaints/'),
+     var response= await http.get(Uri.http(config.BaseUrl, '/complaints/allcomplaints/'),
      
       headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

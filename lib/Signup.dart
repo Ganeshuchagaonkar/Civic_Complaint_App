@@ -3,6 +3,7 @@ import 'package:civic_app/Resusable_Component/btn.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:civic_app/config.dart' as config;
 String token ="";
 
 class Signup extends StatefulWidget {
@@ -17,6 +18,7 @@ class _SignupState extends State<Signup> {
   String role = "citizen";
   String username;
   String email;
+  String adhar;
   String password;
   bool isloading = false;
   int phone;
@@ -27,6 +29,7 @@ class _SignupState extends State<Signup> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  final TextEditingController _adharController = TextEditingController();
 
   @override
   void initState() {
@@ -42,7 +45,7 @@ class _SignupState extends State<Signup> {
     });
     print("getstates");
     var response = await http.get(
-      Uri.http("192.168.43.187:8000", "statecity/states/"),
+      Uri.http(config.BaseUrl, "statecity/states/"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -57,7 +60,7 @@ class _SignupState extends State<Signup> {
   Future <String> getcities( int state_id )async{
     String endpoint="statecity/cities/$state_id/";
     print(endpoint);
-    var res= await http.get(Uri.http("192.168.43.187:8000", endpoint));
+    var res= await http.get(Uri.http(config.BaseUrl, endpoint));
     setState(() {
      cities =jsonDecode(res.body);
     });
@@ -66,20 +69,22 @@ class _SignupState extends State<Signup> {
     
   }
 
-  void signUpRequest(String name, String email, int phone, String password) async {
+  void signUpRequest(String name, String email, int phone, String password,String adhar) async {
   
     var data = jsonEncode({
       "name": name,
       "email": email,
+      "adhar":adhar,
       "phone": phone,
       "country": country,
-      "State_id": statevalue.toInt(),
+      "state_id": statevalue.toInt(),
       "city_id": cityvalue.toInt(),
       "password": password,
       "role":role,
+
     });
     var response = await http.post(
-      Uri.http("192.168.43.187:8000", "users/adduser/"),
+      Uri.http(config.BaseUrl, "users/adduser/"),
       body: data,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -106,7 +111,7 @@ class _SignupState extends State<Signup> {
     else{
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: Colors.green[300],
+            backgroundColor: Colors.red,
             content:const Text("fail to register",style: TextStyle(fontWeight: FontWeight.bold),),
           
          behavior: SnackBarBehavior.floating,
@@ -283,6 +288,35 @@ class _SignupState extends State<Signup> {
                       ),
                     ),
                   ),
+                  SizedBox(height:20),
+                   Material(
+                    elevation: 5,
+                    shadowColor: Colors.grey,
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "This field is Required";
+                        }
+                        if(value.length<12){
+                          return "please enter valid adhar number";
+                        }
+                        return null;
+                      },
+                      controller: _adharController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        prefixIcon:
+                            Icon(Icons.email, size: 20, color: Colors.black),
+                        border: InputBorder.none,
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: 'AdharCard Number',
+                        labelText: 'AdharCard',
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 20),
                   Row(
                     children: [
@@ -430,8 +464,9 @@ class _SignupState extends State<Signup> {
                         username = _nameController.text;
                         email = _emailController.text;
                         password = _passController.text;
+                        adhar = _adharController.text;
                         phone = int.parse(_phoneController.text);
-                         signUpRequest(username,email,phone,password);
+                         signUpRequest(username,email,phone,password, adhar);
                       }
                     },
                   )

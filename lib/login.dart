@@ -5,6 +5,7 @@ import 'package:civic_app/Pages/AdminDashboard/AdminHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:civic_app/Resusable_Component/Btn.dart';
+import 'package:civic_app/config.dart' as config;
 
 class Login extends StatefulWidget {
   @override
@@ -34,7 +35,7 @@ void initState() {
     });
 
 
-    var response= await http.post(Uri.http("192.168.43.187:8000","users/api/token/"),body: jsondata, headers: <String, String>{
+    var response= await http.post(Uri.http(config.BaseUrl,"users/api/token/"),body: jsondata, headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },);
       final data=jsonDecode(response.body);

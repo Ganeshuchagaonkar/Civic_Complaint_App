@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:civic_app/Resusable_Component/btn.dart';
+import 'package:civic_app/config.dart'as config;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 class Addofficer extends StatefulWidget {
@@ -29,7 +30,7 @@ void initState() {
   void submitOfficerDetails(String name ,String email, int phone,String password)async{
    
     var jsonbody=jsonEncode({"name":name,"email":email,"phone":phone,"password":password,"country":"India","role":"officer","state_id":statevalue.toInt(),"city_id":cityvalue.toInt()});
-  var response=await http.post(Uri.http("192.168.43.187:8000", "users/adduser/")
+  var response=await http.post(Uri.http(config.BaseUrl, "users/adduser/")
   ,body: jsonbody,headers: <String,String>{
     'Content-Type':'application/json; charset=UTF-8',
   }
@@ -57,7 +58,7 @@ void initState() {
     
     print("getstates");
     var response = await http.get(
-      Uri.http("192.168.43.187:8000", "statecity/states/"),
+      Uri.http(config.BaseUrl, "statecity/states/"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -73,7 +74,7 @@ void initState() {
    Future <String> getcities( int state_id )async{
     String endpoint="statecity/cities/$state_id/";
     print(endpoint);
-    var res= await http.get(Uri.http("192.168.43.187:8000", endpoint));
+    var res= await http.get(Uri.http(config.BaseUrl, endpoint));
     setState(() {
      cities =jsonDecode(res.body);
     });

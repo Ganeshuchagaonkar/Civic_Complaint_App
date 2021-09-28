@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_vlc_player/vlc_player.dart';
+import 'package:civic_app/config.dart'as config;
 import 'package:flutter_vlc_player/vlc_player_controller.dart';
 
 class AllComplaints extends StatefulWidget {
@@ -121,7 +122,7 @@ class _AllComplaintsViewState extends State<AllComplaintsView> {
         });
         
 
-var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/allcomplaints/officer/$user_id"),headers: <String,String>{
+var res=await http.get(Uri.http(config.BaseUrl, "complaints/allcomplaints/officer/$user_id"),headers: <String,String>{
   'Content-Type':'application/jsone;  charset=UTF-8'
 });
 setState(() {
@@ -200,7 +201,7 @@ print(allcomplaintsdata);
          Text("Image:",style: TextStyle(fontWeight: FontWeight.bold),),
            SizedBox(width:20),
         Container(child:    Image(
-                      image: NetworkImage('http://192.168.43.187:8000'+allcomplaintsdata[index]['comp_image']),
+                      image: NetworkImage("http://"+config.BaseUrl+allcomplaintsdata[index]['comp_image']),
                       width: 250,
                       height: 150,
                       
@@ -226,7 +227,7 @@ print(allcomplaintsdata);
           onPressed: (){
         setState(() {
                   if(streamurl==null){
-                    streamurl="http://192.168.43.187:8000"+allcomplaintsdata[index]['comp_video'];
+                    streamurl="http://"+config.BaseUrl+allcomplaintsdata[index]['comp_video'];
                     // _vlcViewController.dispose();
                   }
                   else{

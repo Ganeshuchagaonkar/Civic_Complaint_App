@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:civic_app/config.dart'as config;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart'as http;
@@ -13,7 +13,7 @@ class _RemoveofficerState extends State<Removeofficer> {
   @override
   void deleteofficer(String userid)async{
 
-  var response=await http.get(Uri.http("192.168.43.187:8000", "users/delete/${int.parse(userid)}")
+  var response=await http.get(Uri.http(config.BaseUrl, "users/delete/${int.parse(userid)}")
   ,headers: <String,String>{
     'Content-Type':'application/json; charset=UTF-8',
     

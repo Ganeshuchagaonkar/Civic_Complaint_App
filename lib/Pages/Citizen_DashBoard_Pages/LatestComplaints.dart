@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:civic_app/config.dart' as config;
 class LatestComplaints extends StatefulWidget {
   @override
   _LatestComplaintsState createState() => _LatestComplaintsState();
@@ -90,7 +91,7 @@ class _LatestViewState extends State<LatestView> {
    }
  Future<String> getJsondata()async{
      
-     var response= await http.get(Uri.http('192.168.43.187:8000', '/complaints/latestcomplaints/'),
+     var response= await http.get(Uri.http(config.BaseUrl, '/complaints/latestcomplaints/'),
      
       headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -106,7 +107,7 @@ class _LatestViewState extends State<LatestView> {
 
   @override
   Widget build(BuildContext context) {
-    return  ListView.builder(
+   return data!=null?   ListView.builder(
     itemCount:data.length,
     itemBuilder:(context,index) {
       return Card( child: ExpansionTile(
@@ -171,7 +172,7 @@ class _LatestViewState extends State<LatestView> {
  )
       );
     },
-  );
+  ):Container(child: Center(child: Text("No data to display"),),);
 
   }
 }

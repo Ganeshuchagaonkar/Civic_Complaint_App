@@ -7,6 +7,7 @@ import 'package:flutter_vlc_player/vlc_player_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
 import 'package:geocoder/geocoder.dart';
+import 'package:civic_app/config.dart'as config;
 
 class Complaints extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _ComplaintsState extends State<Complaints> {
   }
   void getComplaints()async{
 
-var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/allcomplaints"),headers: <String,String>{
+var res=await http.get(Uri.http(config.BaseUrl , "complaints/allcomplaints"),headers: <String,String>{
   'Content-Type':'application/jsone;  charset=UTF-8'
 });
 
@@ -215,7 +216,7 @@ Future getLatLang() async {
           Text("Image",style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width:5),
      
-      Image.network('http://192.168.43.187:8000'+complaintsdata[4]['comp_image'],width: 250,height: 120,),
+      Image.network("http://"+config.BaseUrl+complaintsdata[index]['comp_image'],width: 250,height: 120,),
        ],
      ),
        SizedBox(height:20),
@@ -236,7 +237,7 @@ Future getLatLang() async {
           onPressed: (){
         setState(() {
                   if(streamurl==null){
-                    streamurl="http://192.168.43.187:8000"+complaintsdata[index]['comp_video'];
+                    streamurl="http://"+config.BaseUrl+complaintsdata[index]['comp_video'];
                     // _vlcViewController.dispose();
                   }
                   else{
@@ -254,8 +255,8 @@ Future getLatLang() async {
     ],),),
  ],
  )):
-  CircularProgressIndicator(
-    
+  Container(
+    child: Center(child: Text("No Complaints"),),
   );
  
     },

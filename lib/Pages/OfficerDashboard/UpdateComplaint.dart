@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:civic_app/config.dart'as config;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -106,7 +106,7 @@ class _PendingViewState extends State<PendingView> {
    "progress":progress });
 
     var res = await http.post(
-        Uri.http("192.168.43.187:8000", "complaints/updatecomplaint/"),
+        Uri.http(config.BaseUrl, "complaints/updatecomplaint/"),
         headers: <String, String>{
           'Content-Type': 'application/json;  charset=UTF-8'
         },body: body);
@@ -142,7 +142,7 @@ class _PendingViewState extends State<PendingView> {
           user_id=prefs.get('userid');
         });
     var res = await http.get(
-        Uri.http("192.168.43.187:8000", "complaints/pending/complaints/$user_id"),
+        Uri.http(config.BaseUrl, "complaints/pending/complaints/$user_id"),
         headers: <String, String>{
           'Content-Type': 'application/json;  charset=UTF-8'
         });

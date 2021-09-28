@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:countup/countup.dart';
 import 'package:http/http.dart' as http;
+import 'package:civic_app/config.dart'as config;
 class MainDashBoardPage extends StatefulWidget {
   @override
   _MainDashBoardPageState createState() => _MainDashBoardPageState();
@@ -17,7 +18,7 @@ class _MainDashBoardPageState extends State<MainDashBoardPage> {
   var dashboardData;
   void getHomePageData()async{
   
-    final response=await http.get(Uri.http("192.168.43.187:8000", "complaints/admin/home"),headers: <String,String>{
+    final response=await http.get(Uri.http(config.BaseUrl, "complaints/admin/home"),headers: <String,String>{
       'Content-Type':'application/json; charset=UTF-8',
     });
       setState(() {
