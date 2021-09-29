@@ -54,6 +54,15 @@ class _LatestComplaintsState extends State<LatestComplaints> {
               },
           ),
            Divider(),
+             new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
           
         ],),
         

@@ -70,6 +70,15 @@ class _AdminHomeState extends State<AdminHome> {
                 
               ),
               new Divider(),
+                new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
              
             ],
           ),

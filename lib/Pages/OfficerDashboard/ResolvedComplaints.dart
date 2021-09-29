@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:civic_app/config.dart'as config;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,6 +60,16 @@ class _ResolvedIssueState extends State<ResolvedIssue> {
              Navigator.pushNamed(context, '/officerDashboard/profile');
            },
          ),
+         Divider(),
+         new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
        ], )
          ),
       body: Container(
@@ -91,12 +101,12 @@ class _ResolvedViewState extends State<ResolvedView> {
   }
   @override
   void _resolvedissue()async{
-    String user_id;
+    String city_id;
     final SharedPreferences prefs=await SharedPreferences.getInstance();
     setState(() {
-          user_id=prefs.get('userid').toString();
+          city_id=prefs.get('cityId').toString();
         });
-    var res=await http.get(Uri.http("192.168.43.187:8000", "complaints/resolvedcomplaints/$user_id"),headers: <String,String>{
+    var res=await http.get(Uri.http(config.BaseUrl, "complaints/resolvedcomplaints/$city_id"),headers: <String,String>{
   'Content-Type':'application/jsone;  charset=UTF-8'
 });
  setState(() {
@@ -105,7 +115,7 @@ class _ResolvedViewState extends State<ResolvedView> {
   });
   }
   Widget build(BuildContext context) {
-    return resolvedcomp.length>0? ListView.builder(
+    return resolvedcomp.length>=0? ListView.builder(
     itemCount:resolvedcomp.length,
     itemBuilder:(context,index) {
       return ExpansionTile(

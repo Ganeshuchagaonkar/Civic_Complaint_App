@@ -53,6 +53,15 @@ import 'package:civic_app/config.dart' as config;
                 Navigator.of(context).pushNamed('/citizenDashboard/ViewComplaints');
               },
           ), Divider(),
+            new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
         ],),
 
       ),
@@ -106,7 +115,7 @@ class _MyDyanamicViewState extends State<MyDyanamicView> {
   
   @override
   Widget build(BuildContext context) {
-      //  final titles=['Title1', 'Title2','Title3'];
+      
     return ListView.builder(
     itemCount:data==null? 0 :data.length,
     itemBuilder:(context,index) {

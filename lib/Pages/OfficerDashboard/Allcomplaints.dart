@@ -65,7 +65,19 @@ class _AllComplaintsState extends State<AllComplaints> {
              Navigator.pushNamed(context, '/officerDashboard/profile');
            },
          ),
-       ], )
+           Divider(),
+           new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
+
+       ], ),
+     
          ),
       body:
       Container(

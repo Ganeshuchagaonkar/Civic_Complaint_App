@@ -21,10 +21,11 @@ class _RemoveofficerState extends State<Removeofficer> {
   );
   var res=jsonDecode(response.body);
   if(res['status']==1){
+    Navigator.pop(context);
      ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.green[300],
-            content:const Text("User Deleted Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
+            content:const Text("Officer Deleted Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
           
          behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
@@ -78,6 +79,15 @@ class _RemoveofficerState extends State<Removeofficer> {
               ),
               onTap: () {
                 Navigator.pushNamed(context, '/Admin/Complaints');
+              },
+            ),
+            new Divider(),
+              new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
               },
             ),
             new Divider(),

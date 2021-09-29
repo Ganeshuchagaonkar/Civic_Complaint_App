@@ -68,6 +68,16 @@ class _OfficerDashboardState extends State<OfficerDashboard> {
              Navigator.pushNamed(context, '/officerDashboard/profile');
            },
          ),
+         Divider(),
+         new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
        ], )
          ),
      body: OfficerDashBoardPage(),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:countup/countup.dart';
 import 'package:http/http.dart' as http;
+import 'package:civic_app/config.dart' as config;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OfficerDashBoardPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _OfficerDashBoardPageState extends State<OfficerDashBoardPage> {
     });
   
     final response = await http.get(
-        Uri.http("192.168.43.187:8000", "complaints/officer/home/$user_id"),
+        Uri.http(config.BaseUrl, "complaints/officer/home/$user_id"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         });

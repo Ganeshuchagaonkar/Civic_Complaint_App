@@ -44,6 +44,15 @@ class Profile extends StatelessWidget {
                 Navigator.of(context).pushNamed('/citizenDashboard');
               },
           ), Divider(),
+            new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
         ],),
 
       ),
@@ -120,7 +129,7 @@ class _DetailProfileState extends State<DetailProfile> {
                     
                     Text('Name :',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold) ),
                     SizedBox(width:30),
-                    Text(name!=null?'$name':""),
+                    Text(name!=null?'$name'.toUpperCase():""),
 
                   ],
                 ),

@@ -62,6 +62,16 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
              Navigator.pushNamed(context, '/officerDashboard/profile');
            },
          ),
+         Divider(),
+         new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
        ], )
          ),
         body: Container(
@@ -137,12 +147,14 @@ class _PendingViewState extends State<PendingView> {
 
   void pendingIssue() async {
     int user_id;
+    String city_id;
     final SharedPreferences prefs=await SharedPreferences.getInstance();
     setState(() {
           user_id=prefs.get('userid');
+          city_id=prefs.get('cityId').toString();
         });
     var res = await http.get(
-        Uri.http(config.BaseUrl, "complaints/pending/complaints/$user_id"),
+        Uri.http(config.BaseUrl, "complaints/pending/complaints/$city_id"),
         headers: <String, String>{
           'Content-Type': 'application/json;  charset=UTF-8'
         });

@@ -38,7 +38,7 @@ void initState() {
   var data=jsonDecode(response.body);
   print(data);
   if(data['status']==1){
-       
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.green[300],
@@ -149,6 +149,15 @@ void initState() {
               ),
               onTap: (){
                 Navigator.pushNamed(context, '/Admin/Complaints');
+              },
+            ),
+            new Divider(),
+            new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
               },
             ),
             new Divider(),

@@ -108,6 +108,7 @@ class _SignupState extends State<Signup> {
        
         ));
     }
+   
     else{
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

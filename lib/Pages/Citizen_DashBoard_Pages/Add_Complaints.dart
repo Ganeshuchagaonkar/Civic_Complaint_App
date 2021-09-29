@@ -51,8 +51,8 @@ class _Add_ComplaintsState extends State<Add_Complaints> {
       String title, String description, String address) async {
         print(_imagefilename);
         print(_image.path);
-        String url= "complaints/addcomplaint/";
-        var request=http.MultipartRequest('POST',Uri.parse(config.BaseUrl + url ));
+        String url= "http://"+config.BaseUrl+"/complaints/addcomplaint/";
+        var request=http.MultipartRequest('POST',Uri.parse(url));
         request.files.add( http.MultipartFile('comp_image', File(_image.path).readAsBytes().asStream(),File(_image.path).lengthSync(),filename: _image.path.split('/').last));
         request.files.add( http.MultipartFile('comp_video',File( _video.path).readAsBytes().asStream(),File( _video.path).lengthSync(),filename:  _video.path.split('/').last));
        
@@ -66,6 +66,7 @@ class _Add_ComplaintsState extends State<Add_Complaints> {
  var res=await request.send();
 
  if(res.statusCode==200){
+      Navigator.pop(context);
    ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.green[300],
@@ -170,6 +171,15 @@ class _Add_ComplaintsState extends State<Add_Complaints> {
               },
             ),
             Divider(),
+              new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
           ],
         ),
       ),

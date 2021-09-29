@@ -56,6 +56,16 @@ drawer:new Drawer(
              Navigator.pushNamed(context, '/officerDashboard/profile');
            },
          ),
+         Divider(),
+         new ListTile(
+              title: new Text(
+                'LogOut',
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+            new Divider(),
        ], )
          ),
       body: DetailProfile(),
@@ -121,7 +131,7 @@ class _DetailProfileState extends State<DetailProfile> {
                     
                     Text('Name :',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold) ),
                     SizedBox(width:30),
-                    Text('$name'),
+                    Text('$name'.toLowerCase()),
 
                   ],
                 ),
